@@ -235,13 +235,25 @@ require("toggleterm").setup{
 
 require('formatter').setup({
   filetype = {
+--    python = {
+--      -- Configuration for psf/black
+--      function()
+--        return {
+--          exe = "black", -- this should be available on your $PATH
+--          args = { '--line-length 120', '-' },
+--          stdin = true,
+--        }
+--      end
+--    },
     python = {
-      -- Configuration for psf/black
       function()
         return {
-          exe = "black", -- this should be available on your $PATH
-          args = { '--line-length 120', '-' },
-          stdin = true,
+          exe = "python3 -m autopep8",
+          args = {
+            "--in-place --aggressive --aggressive",
+            vim.fn.fnameescape(vim.api.nvim_buf_get_name(0))
+          },
+          stdin = false
         }
       end
     },
@@ -255,15 +267,25 @@ require('formatter').setup({
         }
       end
     },
+    typescript = {
+      -- prettier
+      function()
+        return {
+          exe = "prettier",
+          args = {"--stdin-filepath", vim.fn.fnameescape(vim.api.nvim_buf_get_name(0)), '--single-quote'},
+          stdin = true
+        }
+      end
+    },
   }
 })
 
-vim.api.nvim_exec([[
-augroup FormatAutogroup
-  autocmd!
-  autocmd BufWritePost *.py,*.ts,*.js FormatWrite
-augroup END
-]], true)
+--vim.api.nvim_exec([[
+--augroup FormatAutogroup
+--  autocmd!
+--  autocmd BufWritePost *.py,*.ts FormatWrite
+--augroup END
+--]], true)
 
 require('dap-python').setup('~/.virutalenvs/debugpy/bin/python')
 require('dap-python').test_runner = 'pytest'
@@ -316,3 +338,6 @@ end
 dap.listeners.before.event_exited["dapui_config"] = function()
   dapui.close()
 end
+
+-- Commenting out abilities
+require('Comment').setup()
