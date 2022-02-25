@@ -51,4 +51,5 @@ return require('packer').startup(function()
           require('Comment').setup()
       end
   }
+  use 'Pocco81/AutoSave.nvim'
 end)
