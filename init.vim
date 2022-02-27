@@ -35,6 +35,10 @@ nnoremap <leader>n :NvimTreeToggle<CR>
 " File searcher
 let g:Lf_PreviewInPopup = 1
 let g:Lf_WindowPosition = 'popup'
+let g:Lf_ShortcutF = "<leader>ff"
+noremap <leader>fb :<C-U><C-R>=printf("Leaderf buffer %s", "")<CR><CR>
+noremap <leader>fl :<C-U><C-R>=printf("Leaderf line %s", "")<CR><CR>
+noremap <leader>fr :<C-U><C-R>=printf("Leaderf rg %s", "")<CR><CR>
 
 
 " Plugin Manager
