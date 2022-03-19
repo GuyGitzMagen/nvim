@@ -154,13 +154,30 @@ local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
 
 -- Enable the following language servers
-local servers = { 'tsserver', 'jsonls', 'yamlls', 'pyright' }
+local servers = { 'tsserver', 'jsonls', 'yamlls', 'sumneko_lua', 'pyright' }
 for _, lsp in ipairs(servers) do
   lspconfig[lsp].setup {
     on_attach = on_attach,
     capabilities = capabilities,
   }
 end
+
+-- lspconfig['pylsp'].setup {
+--     on_attach = on_attach,
+--     capabilities = capabilities,
+--     settings = {
+--       pylsp = {
+--         plugins = { 
+--           flake8 = {
+--             enabled = true
+--           },
+--           pycodestyle = {
+--             enabled = false
+--           }
+--         }
+--       }
+--   }
+-- }
 
 -- luasnip setup
 local luasnip = require 'luasnip'
@@ -281,13 +298,44 @@ require('formatter').setup({
   }
 })
 
---vim.api.nvim_exec([[
---augroup FormatAutogroup
---  autocmd!
---  autocmd BufWritePost *.py,*.ts FormatWrite
---augroup END
---]], true)
+vim.api.nvim_exec([[
+augroup FormatAutogroup
+  autocmd!
+  autocmd BufWritePost *.py FormatWrite
+augroup END
+]], true)
+local dap = require('dap')
+dap.adapters.node2 = {
+    type = 'executable',
+    command = 'node',
+    args = {
+        vim.fn.stdpath("data") .. "/dapinstall/jsnode/" ..
+            '/vscode-node-debug2/out/src/nodeDebug.js'
+    }
+}
 
+dap.configurations.javascript = {
+    {
+        type = 'node2',
+        request = 'attach',
+        program = '${workspaceFolder}/${file}',
+        cwd = vim.fn.getcwd(),
+        sourceMaps = true,
+        protocol = 'inspector',
+        console = 'integratedTerminal'
+    }
+}
+dap.configurations.typescript = {
+    {
+        type = 'node2',
+        request = 'attach',
+        program = '${workspaceFolder}/${file}',
+        cwd = vim.fn.getcwd(),
+        sourceMaps = true,
+        protocol = 'inspector',
+        console = 'integratedTerminal'
+    }
+}
 require('dap-python').setup('~/.virutalenvs/debugpy/bin/python')
 require('dap-python').test_runner = 'pytest'
 require("dapui").setup({
@@ -342,12 +390,6 @@ end
 
 -- Commenting out abilities
 require('Comment').setup()
-
--- spelling
-require('spellsitter').setup()
-
--- saving
-require("autosave").setup()
 
 -- DAP install
 require("dap-install")

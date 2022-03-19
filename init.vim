@@ -34,6 +34,7 @@ nnoremap <leader>n :NvimTreeToggle<CR>
 
 " File searcher
 let g:Lf_PreviewInPopup = 1
+let g:Lf_UseCache = 0
 let g:Lf_WindowPosition = 'popup'
 let g:Lf_ShortcutF = "<leader>ff"
 noremap <leader>fb :<C-U><C-R>=printf("Leaderf buffer %s", "")<CR><CR>

@@ -53,7 +53,6 @@ return require('packer').startup(function()
   }
   use { 'Pocco81/AutoSave.nvim' }
   use { 'williamboman/nvim-lsp-installer', requires = { 'neovim/nvim-lspconfig' } }
-  use { 'lewis6991/spellsitter.nvim' }
-  use { "Pocco81/DAPInstall.nvim" }
+  use { 'Pocco81/DAPInstall.nvim' }
 
 end)
