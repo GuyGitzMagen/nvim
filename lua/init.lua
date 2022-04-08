@@ -396,4 +396,11 @@ require("dap-install")
 
 -- octo
 require"octo".setup()
+
+-- telescope
 require('telescope').load_extension('fzf')
+
+-- which
+local wk = require("which-key")
+
+
