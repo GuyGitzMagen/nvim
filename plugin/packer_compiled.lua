@@ -120,6 +120,11 @@ _G.packer_plugins = {
     path = "/Users/guymagen/.local/share/nvim/site/pack/packer/start/indent-blankline.nvim",
     url = "https://github.com/lukas-reineke/indent-blankline.nvim"
   },
+  jester = {
+    loaded = true,
+    path = "/Users/guymagen/.local/share/nvim/site/pack/packer/start/jester",
+    url = "https://github.com/David-Kunz/jester"
+  },
   ["lualine.nvim"] = {
     loaded = true,
     path = "/Users/guymagen/.local/share/nvim/site/pack/packer/start/lualine.nvim",

@@ -393,3 +393,6 @@ require('Comment').setup()
 
 -- DAP install
 require("dap-install")
+
+-- octo
+require"octo".setup()
