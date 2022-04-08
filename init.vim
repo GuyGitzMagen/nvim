@@ -3,7 +3,6 @@ let mapleader = ","
 
 " Options
 set background=dark
-set clipboard=unnamedplus
 set completeopt=noinsert,menuone,noselect
 set hidden
 set inccommand=split
@@ -32,14 +31,11 @@ let &t_ZR="\e[23m"
 " File explorer
 nnoremap <leader>n :NvimTreeToggle<CR>
 
-" File searcher
-let g:Lf_PreviewInPopup = 1
-let g:Lf_UseCache = 0
-let g:Lf_WindowPosition = 'popup'
-let g:Lf_ShortcutF = "<leader>ff"
-noremap <leader>fb :<C-U><C-R>=printf("Leaderf buffer %s", "")<CR><CR>
-noremap <leader>fl :<C-U><C-R>=printf("Leaderf line %s", "")<CR><CR>
-noremap <leader>fr :<C-U><C-R>=printf("Leaderf rg %s", "")<CR><CR>
+" telescope
+nnoremap <leader>ff <cmd>Telescope find_files<cr>
+nnoremap <leader>fr <cmd>Telescope live_grep<cr>
+nnoremap <leader>fb <cmd>Telescope buffers<cr>
+nnoremap <leader>fh <cmd>Telescope help_tags<cr>
 
 
 " Plugin Manager

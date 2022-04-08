@@ -37,7 +37,6 @@ return require('packer').startup(function()
   use 'lukas-reineke/indent-blankline.nvim'
     -- Add git related info in the signs columns and popups
   use { 'lewis6991/gitsigns.nvim', requires = { 'nvim-lua/plenary.nvim' } }
-  use 'Yggdroot/LeaderF'
   use 'akinsho/toggleterm.nvim'
   use 'folke/trouble.nvim'
   use { 'rcarriga/vim-ultest', requires = {'vim-test/vim-test'}, run = ':UpdateRemotePlugins' }
@@ -66,5 +65,10 @@ return require('packer').startup(function()
     require"octo".setup()
   end
 }
+  use {'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
+  use {
+    'nvim-telescope/telescope.nvim',
+    requires = { {'nvim-lua/plenary.nvim'} }
+  }
 
 end)

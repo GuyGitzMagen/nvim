@@ -396,3 +396,4 @@ require("dap-install")
 
 -- octo
 require"octo".setup()
+require('telescope').load_extension('fzf')
