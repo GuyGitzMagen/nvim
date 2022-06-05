@@ -154,7 +154,7 @@ local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
 
 -- Enable the following language servers
-local servers = { 'tsserver', 'jsonls', 'yamlls', 'sumneko_lua', 'pyright' }
+local servers = { 'tsserver', 'jsonls', 'yamlls', 'sumneko_lua', 'pyright', 'jdtls' }
 for _, lsp in ipairs(servers) do
   lspconfig[lsp].setup {
     on_attach = on_attach,
@@ -230,13 +230,7 @@ cmp.setup {
 -- vim: ts=2 sts=2 sw=2 et
 require("toggleterm").setup{
   -- size can be a number or function which is passed the current terminal
-  size = function(term)
-    if term.direction == "horizontal" then
-      return 15
-    elseif term.direction == "vertical" then
-      return vim.o.columns * 0.4
-    end
-  end,
+  size = 15,
   open_mapping = [[<c-q>]],
   hide_numbers = true, -- hide the number column in toggleterm buffers
   shade_filetypes = {},
@@ -263,18 +257,18 @@ require('formatter').setup({
 --        }
 --      end
 --    },
-    python = {
-      function()
-        return {
-          exe = "python3 -m autopep8",
-          args = {
-            "--in-place --aggressive --aggressive",
-            vim.fn.fnameescape(vim.api.nvim_buf_get_name(0))
-          },
-          stdin = false
-        }
-      end
-    },
+python = {
+  function()
+    return {
+      exe = "/usr/bin/python3 -m autopep8",
+      args = {
+        "--in-place",
+        vim.fn.fnameescape(vim.api.nvim_buf_get_name(0))
+      },
+      stdin = true
+    }
+  end
+},
     javascript = {
       -- prettier
       function()
@@ -301,7 +295,7 @@ require('formatter').setup({
 vim.api.nvim_exec([[
 augroup FormatAutogroup
   autocmd!
-  autocmd BufWritePost *.py FormatWrite
+  autocmd BufWritePost *.py,*.ts,*.js FormatWrite
 augroup END
 ]], true)
 local dap = require('dap')

@@ -66,11 +66,12 @@ nnoremap <silent> <leader>b :lua require'dap'.toggle_breakpoint()<CR>
 nnoremap <silent> <leader>B :lua require'dap'.set_breakpoint(vim.fn.input('Breakpoint condition: '))<CR>
 nnoremap <silent> <leader>lp :lua require'dap'.set_breakpoint(nil, nil, vim.fn.input('Log point message: '))<CR>
 nnoremap <silent> <leader>dr :lua require'dap'.repl.open()<CR>
-nnoremap <silent> <leader>dl :lua require'dap'.run_last()<CR>
-nnoremap <silent> <leader>dn :lua require('dap-python').test_method()<CR>
-nnoremap <silent> <leader>ds :lua require('jester').debug()<CR>
-nnoremap <silent> <leader>df :lua require('dap-python').test_class()<CR>
-vnoremap <silent> <leader>ds <ESC>:lua require('dap-python').debug_selection()<CR>
+au Filetype python nnoremap <silent> <leader>dn :lua require('dap-python').test_method()<CR>
+au Filetype python nnoremap <silent> <leader>dl :lua require'dap'.run_last()<CR>
+au Filetype python nnoremap <silent> <leader>df :lua require('dap-python').test_class()<CR>
+au Filetype python vnoremap <silent> <leader>ds <ESC>:lua require('dap-python').debug_selection()<CR>
+au Filetype typescript,javascript nnoremap <silent> <leader>dn :lua require('jester').debug()<CR>
+au Filetype typescript,javascript nnoremap <silent> <leader>dl :lua require('jester').debug_last()<CR>
 
 set autoread
 au CursorHold * checktime

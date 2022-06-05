@@ -21,7 +21,9 @@ return require('packer').startup(function()
     requires = {
       'kyazdani42/nvim-web-devicons', -- optional, for file icon
     },
-    config = function() require'nvim-tree'.setup {} end
+    config = function() require'nvim-tree'.setup {
+      git = { ignore = false}
+    } end
   }
   use 'nvim-lualine/lualine.nvim'
   use 'nvim-treesitter/nvim-treesitter'
@@ -76,5 +78,7 @@ return require('packer').startup(function()
     require("which-key").setup {}
   end
 }
+ use {'simeji/winresizer'}
+ use {'mustache/vim-mustache-handlebars'}
 
 end)
