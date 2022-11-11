@@ -72,6 +72,19 @@ au Filetype python nnoremap <silent> <leader>df :lua require('dap-python').test_
 au Filetype python vnoremap <silent> <leader>ds <ESC>:lua require('dap-python').debug_selection()<CR>
 au Filetype typescript,javascript nnoremap <silent> <leader>dn :lua require('jester').debug()<CR>
 au Filetype typescript,javascript nnoremap <silent> <leader>dl :lua require('jester').debug_last()<CR>
+" nnoremap <silent> <leader>dn :lua require("neotest").run.run({strategy = "dap"})<CR>
 
 set autoread
 au CursorHold * checktime
+
+imap <silent><script><expr> <C-J> copilot#Accept("\<CR>")
+let g:copilot_no_tab_map = v:true
+set title titlestring=%{fnamemodify(getcwd(),\ ':t')}
+nnoremap <leader>xx <cmd>TroubleToggle<cr>
+nnoremap <leader>xw <cmd>TroubleToggle workspace_diagnostics<cr>
+nnoremap <leader>xd <cmd>TroubleToggle document_diagnostics<cr>
+nnoremap <leader>xq <cmd>TroubleToggle quickfix<cr>
+nnoremap <leader>xl <cmd>TroubleToggle loclist<cr>
+
+" spelling
+set spell spelllang=en_us

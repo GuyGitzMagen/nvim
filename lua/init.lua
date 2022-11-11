@@ -154,7 +154,7 @@ local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
 
 -- Enable the following language servers
-local servers = { 'tsserver', 'jsonls', 'yamlls', 'sumneko_lua', 'pyright', 'jdtls' }
+local servers = { 'tsserver', 'jsonls', 'yamlls', 'sumneko_lua', 'pyright', 'jdtls', 'cssls' }
 for _, lsp in ipairs(servers) do
   lspconfig[lsp].setup {
     on_attach = on_attach,
@@ -201,15 +201,15 @@ cmp.setup {
       behavior = cmp.ConfirmBehavior.Replace,
       select = true,
     },
-    ['<Tab>'] = function(fallback)
-      if cmp.visible() then
-        cmp.select_next_item()
-      elseif luasnip.expand_or_jumpable() then
-        luasnip.expand_or_jump()
-      else
-        fallback()
-      end
-    end,
+      ['<Tab>'] = function(fallback)
+        if cmp.visible() then
+          cmp.select_next_item()
+        elseif luasnip.expand_or_jumpable() then
+          luasnip.expand_or_jump()
+        else
+          fallback()
+        end
+      end,
     ['<S-Tab>'] = function(fallback)
       if cmp.visible() then
         cmp.select_prev_item()
@@ -230,7 +230,7 @@ cmp.setup {
 -- vim: ts=2 sts=2 sw=2 et
 require("toggleterm").setup{
   -- size can be a number or function which is passed the current terminal
-  size = 15,
+  -- size = 15,
   open_mapping = [[<c-q>]],
   hide_numbers = true, -- hide the number column in toggleterm buffers
   shade_filetypes = {},
@@ -242,7 +242,11 @@ require("toggleterm").setup{
   persist_size = true,
   direction = 'horizontal',
   close_on_exit = true, -- close the terminal window when the process exits
+  winbar = {
+    enabled = true,
+  }
 }
+
 
 
 require('formatter').setup({
@@ -289,13 +293,23 @@ python = {
         }
       end
     },
+    typescriptreact = {
+      -- prettier
+      function()
+        return {
+          exe = "prettier",
+          args = {"--stdin-filepath", vim.fn.fnameescape(vim.api.nvim_buf_get_name(0)), '--single-quote'},
+          stdin = true
+        }
+      end
+    },
   }
 })
 
 vim.api.nvim_exec([[
 augroup FormatAutogroup
   autocmd!
-  autocmd BufWritePost *.py,*.ts,*.js FormatWrite
+  autocmd BufWritePost *.py,*.ts,*.js,*.tsx,*.scss FormatWrite
 augroup END
 ]], true)
 local dap = require('dap')
@@ -307,6 +321,12 @@ dap.adapters.node2 = {
             '/vscode-node-debug2/out/src/nodeDebug.js'
     }
 }
+require("dap-vscode-js").setup({
+  node_path = "node", -- Path of node executable. Defaults to $NODE_PATH, and then "node"
+  -- debugger_path = "/Users/guymagen/code/vscode-js-debug", -- Path to vscode-js-debug installation. 
+  adapters = { 'pwa-node', 'pwa-chrome', 'pwa-msedge', 'node-terminal', 'pwa-extensionHost' }, -- which adapters to register in nvim-dap
+
+})
 
 dap.configurations.javascript = {
     {
@@ -317,7 +337,21 @@ dap.configurations.javascript = {
         sourceMaps = true,
         protocol = 'inspector',
         console = 'integratedTerminal'
-    }
+    },
+  -- {
+  --   type = "pwa-node",
+  --   request = "launch",
+  --   name = "Launch file",
+  --   program = "${file}",
+  --   cwd = "${workspaceFolder}",
+  -- },
+  -- {
+  --   type = "pwa-node",
+  --   request = "attach",
+  --   name = "Attach",
+  --   processId = require'dap.utils'.pick_process,
+  --   cwd = "${workspaceFolder}",
+  -- }
 }
 dap.configurations.typescript = {
     {
@@ -328,7 +362,21 @@ dap.configurations.typescript = {
         sourceMaps = true,
         protocol = 'inspector',
         console = 'integratedTerminal'
-    }
+    },
+  -- {
+  --   type = "pwa-node",
+  --   request = "launch",
+  --   name = "Launch file",
+  --   program = "${file}",
+  --   cwd = "${workspaceFolder}",
+  -- },
+  -- {
+  --   type = "pwa-node",
+  --   request = "attach",
+  --   name = "Attach",
+  --   processId = require'dap.utils'.pick_process,
+  --   cwd = "${workspaceFolder}",
+  -- }
 }
 require('dap-python').setup('~/.virutalenvs/debugpy/bin/python')
 require('dap-python').test_runner = 'pytest'
@@ -342,22 +390,25 @@ require("dapui").setup({
     edit = "e",
     repl = "r",
   },
-  sidebar = {
-    -- You can change the order of elements in the sidebar
-    elements = {
-      -- Provide as ID strings or tables with "id" and "size" keys
-      { id = "watches", size = 0.25 },
-      { id = "stacks", size = 0.25 },
-      { id = "breakpoints", size = 0.25 },
-      { id = "scopes", size = 0.25 },
+    layouts = {
+    {
+      elements = {
+        'watches',
+        'stacks',
+        'breakpoints',
+        'scopes',
+      },
+      size = 40,
+      position = 'left',
     },
-    size = 40,
-    position = "left", -- Can be "left", "right", "top", "bottom"
-  },
-  tray = {
-    elements = {},
-    size = 10,
-    position = "bottom", -- Can be "left", "right", "top", "bottom"
+    {
+      elements = {
+        'repl',
+        'console',
+      },
+      size = 10,
+      position = 'bottom',
+    },
   },
   floating = {
     max_height = nil, -- These can be integers or a float between 0 and 1.
@@ -370,7 +421,7 @@ require("dapui").setup({
   },
   windows = { indent = 1 },
 })
-local dap, dapui = require("dap"), require("dapui")
+local dapui = require("dapui")
 dap.defaults.python.terminal_win_cmd = 'belowright new +resize10'
 dap.listeners.after.event_initialized["dapui_config"] = function()
   dapui.open()
@@ -385,9 +436,6 @@ end
 -- Commenting out abilities
 require('Comment').setup()
 
--- DAP install
-require("dap-install")
-
 -- octo
 require"octo".setup()
 
@@ -396,5 +444,34 @@ require('telescope').load_extension('fzf')
 
 -- which
 local wk = require("which-key")
+
+require('nvim-tree').setup {
+  diagnostics = { enable = true },
+  git = { ignore = false},
+  actions = {
+    open_file = {
+      resize_window = true,
+    }
+  }
+}
+
+require("neotest").setup({
+  adapters = {
+    require("neotest-python")({
+      dap = { justMyCode = false },
+    }),
+    require("neotest-jest")({
+      -- dap = { justMyCode = false },
+      jestCommand = "npm test --",
+      jestConfigFile = "custom.jest.config.ts",
+      env = { CI = true },
+      cwd = function(path)
+        return vim.fn.getcwd()
+      end,
+    }),
+  },
+})
+
+require("stabilize").setup()
 
 

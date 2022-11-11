@@ -22,6 +22,7 @@ return require('packer').startup(function()
       'kyazdani42/nvim-web-devicons', -- optional, for file icon
     },
     config = function() require'nvim-tree'.setup {
+      diagnostics = { enable = true },
       git = { ignore = false}
     } end
   }
@@ -39,9 +40,11 @@ return require('packer').startup(function()
   use 'lukas-reineke/indent-blankline.nvim'
     -- Add git related info in the signs columns and popups
   use { 'lewis6991/gitsigns.nvim', requires = { 'nvim-lua/plenary.nvim' } }
-  use 'akinsho/toggleterm.nvim'
+  use {"akinsho/toggleterm.nvim", tag = 'v2.*', config = function()
+  require("toggleterm").setup()
+  end}
   use 'folke/trouble.nvim'
-  use { 'rcarriga/vim-ultest', requires = {'vim-test/vim-test'}, run = ':UpdateRemotePlugins' }
+  -- use { 'rcarriga/vim-ultest', requires = {'vim-test/vim-test'}, run = ':UpdateRemotePlugins' }
   use 'mhartington/formatter.nvim'
   use 'mfussenegger/nvim-dap'
   use 'mfussenegger/nvim-dap-python'
@@ -52,7 +55,7 @@ return require('packer').startup(function()
           require('Comment').setup()
       end
   }
-  use { 'Pocco81/AutoSave.nvim' }
+  -- use { 'Pocco81/AutoSave.nvim' }
   use { 'williamboman/nvim-lsp-installer', requires = { 'neovim/nvim-lspconfig' } }
   use { 'Pocco81/DAPInstall.nvim' }
   use { 'David-Kunz/jester' }
@@ -80,5 +83,24 @@ return require('packer').startup(function()
 }
  use {'simeji/winresizer'}
  use {'mustache/vim-mustache-handlebars'}
-
-end)
+ use {'github/copilot.vim'}
+ use {
+  "nvim-neotest/neotest",
+  requires = {
+    "nvim-lua/plenary.nvim",
+    "nvim-treesitter/nvim-treesitter",
+    "antoinemadec/FixCursorHold.nvim",
+    "haydenmeade/neotest-jest",
+    "nvim-neotest/neotest-python",
+  }
+}
+use { "mxsdev/nvim-dap-vscode-js", requires = {"mfussenegger/nvim-dap"} }
+use {
+  "microsoft/vscode-js-debug",
+  tag = "v1.70.0",
+  opt = true,
+  run = "npm install --legacy-peer-deps && npm run compile" 
+}
+use { "luukvbaal/stabilize.nvim" }
+end,
+{config = {git = {clone_timeout = false}}})
