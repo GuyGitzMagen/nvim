@@ -151,16 +151,63 @@ end
 
 -- nvim-cmp supports additional completion capabilities
 local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
+capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
+
+local function rename_file()
+    local source_file, target_file
+
+    vim.ui.input({
+        prompt = "Target: ",
+        completion = "file",
+        default = vim.api.nvim_buf_get_name(0)
+    },
+        function(input)
+            target_file = input
+        end
+    )
+
+    local params = {
+        command = "_typescript.applyRenameFile",
+        arguments = {
+            {
+                sourceUri = vim.api.nvim_buf_get_name(0),
+                targetUri = target_file,
+            },
+        },
+        title = ""
+    }
+
+    vim.lsp.util.rename(vim.api.nvim_buf_get_name(0), target_file)
+    vim.lsp.buf.execute_command(params)
+end
+
 
 -- Enable the following language servers
-local servers = { 'tsserver', 'jsonls', 'yamlls', 'sumneko_lua', 'pyright', 'jdtls', 'cssls' }
+local servers = { 'tsserver', 'jsonls', 'yamlls', 'pyright', 'jdtls', 'cssls' }
 for _, lsp in ipairs(servers) do
   lspconfig[lsp].setup {
     on_attach = on_attach,
     capabilities = capabilities,
+    commands = {
+        RenameFile = {
+                rename_file,
+                description = "Rename file"
+        }
+    }
   }
 end
+
+lspconfig['yamlls'].setup {
+  settings = {
+    yaml = {
+      schemas = {
+        ['https://json.schemastore.org/github-workflow'] = '.github/workflows/*.yml',
+        ["https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.22.0/all.json"] = "k8s/**",
+      },
+    },
+  },
+}
+
 
 -- lspconfig['pylsp'].setup {
 --     on_attach = on_attach,
@@ -473,5 +520,6 @@ require("neotest").setup({
 })
 
 require("stabilize").setup()
+require("mason").setup()
 
 

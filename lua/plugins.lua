@@ -56,7 +56,7 @@ return require('packer').startup(function()
       end
   }
   -- use { 'Pocco81/AutoSave.nvim' }
-  use { 'williamboman/nvim-lsp-installer', requires = { 'neovim/nvim-lspconfig' } }
+  -- use { 'williamboman/nvim-lsp-installer', requires = { 'neovim/nvim-lspconfig' } }
   use { 'Pocco81/DAPInstall.nvim' }
   use { 'David-Kunz/jester' }
   use {
@@ -74,6 +74,9 @@ return require('packer').startup(function()
   use {
     'nvim-telescope/telescope.nvim',
     requires = { {'nvim-lua/plenary.nvim'} }
+  }
+  use {
+    'f-person/git-blame.nvim',
   }
   use {
   "folke/which-key.nvim",
@@ -102,5 +105,10 @@ use {
   run = "npm install --legacy-peer-deps && npm run compile" 
 }
 use { "luukvbaal/stabilize.nvim" }
+  use {
+    "williamboman/mason.nvim",
+    "williamboman/mason-lspconfig.nvim",
+}
+
 end,
 {config = {git = {clone_timeout = false}}})

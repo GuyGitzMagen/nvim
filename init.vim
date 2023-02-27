@@ -87,4 +87,12 @@ nnoremap <leader>xq <cmd>TroubleToggle quickfix<cr>
 nnoremap <leader>xl <cmd>TroubleToggle loclist<cr>
 
 " spelling
-set spell spelllang=en_us
+" set spell spelllang=en_us
+
+nmap ,cs :let @*=expand("%")<CR>
+nmap ,cl :let @*=expand("%:p")<CR>
+vnoremap <C-C> "*y
+vnoremap <C-X> "*x
+" map <C-V> "*p
+" cmap <C-V>  <C-R>*
+" inoremap <C-V> <C-R>*
