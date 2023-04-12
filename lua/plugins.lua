@@ -1,67 +1,65 @@
-
--- Install packer
-local install_path = vim.fn.stdpath 'data' .. '/site/pack/packer/start/packer.nvim'
-
-if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
-  vim.fn.execute('!git clone https://github.com/wbthomason/packer.nvim ' .. install_path)
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not vim.loop.fs_stat(lazypath) then
+  vim.fn.system({
+    "git",
+    "clone",
+    "--filter=blob:none",
+    "https://github.com/folke/lazy.nvim.git",
+    "--branch=stable", -- latest stable release
+    lazypath,
+  })
 end
 
-vim.cmd [[
-  augroup Packer
-    autocmd!
-    autocmd BufWritePost init.lua PackerCompile
-  augroup end
-]]
+vim.opt.rtp:prepend(lazypath)
 
-return require('packer').startup(function()
-  -- Packer can manage itself
-  use 'wbthomason/packer.nvim'
-  use {
+
+return require('lazy').setup({
+{
     'kyazdani42/nvim-tree.lua',
-    requires = {
+    dependencies = {
       'kyazdani42/nvim-web-devicons', -- optional, for file icon
     },
     config = function() require'nvim-tree'.setup {
       diagnostics = { enable = true },
       git = { ignore = false}
     } end
-  }
-  use 'nvim-lualine/lualine.nvim'
-  use 'nvim-treesitter/nvim-treesitter'
+  },
+  'nvim-lualine/lualine.nvim',
+  'nvim-treesitter/nvim-treesitter',
     -- Additional textobjects for treesitter
-  use 'nvim-treesitter/nvim-treesitter-textobjects'
-  use 'neovim/nvim-lspconfig' -- Collection of configurations for built-in LSP client
-  use 'hrsh7th/nvim-cmp' -- Autocompletion plugin
-  use 'hrsh7th/cmp-nvim-lsp'
-  use 'saadparwaiz1/cmp_luasnip'
-  use 'L3MON4D3/LuaSnip' -- Snippets plugin
-  use 'mjlbach/onedark.nvim'
+  'nvim-treesitter/nvim-treesitter-textobjects',
+  'neovim/nvim-lspconfig', -- Collection of configurations for built-in LSP client
+  'hrsh7th/nvim-cmp', -- Autocompletion plugin
+  'hrsh7th/cmp-nvim-lsp',
+  'saadparwaiz1/cmp_luasnip',
+  'L3MON4D3/LuaSnip', -- Snippets plugin
+  'mjlbach/onedark.nvim',
     -- Add indentation guides even on blank lines
-  use 'lukas-reineke/indent-blankline.nvim'
+  -- 'lukas-reineke/indent-blankline.nvim',
     -- Add git related info in the signs columns and popups
-  use { 'lewis6991/gitsigns.nvim', requires = { 'nvim-lua/plenary.nvim' } }
-  use {"akinsho/toggleterm.nvim", tag = 'v2.*', config = function()
+  { 'lewis6991/gitsigns.nvim', dependencies = { 'nvim-lua/plenary.nvim' } },
+  {"akinsho/toggleterm.nvim", config = function()
   require("toggleterm").setup()
-  end}
-  use 'folke/trouble.nvim'
+  end},
+  'folke/trouble.nvim',
   -- use { 'rcarriga/vim-ultest', requires = {'vim-test/vim-test'}, run = ':UpdateRemotePlugins' }
-  use 'mhartington/formatter.nvim'
-  use 'mfussenegger/nvim-dap'
-  use 'mfussenegger/nvim-dap-python'
-  use { "rcarriga/nvim-dap-ui", requires = {"mfussenegger/nvim-dap"} }
-  use {
+  'mhartington/formatter.nvim',
+  'mfussenegger/nvim-dap',
+  'mfussenegger/nvim-dap-python',
+  { "rcarriga/nvim-dap-ui", dependencies = {"mfussenegger/nvim-dap"} },
+  {
       'numToStr/Comment.nvim',
       config = function()
           require('Comment').setup()
       end
-  }
+  },
   -- use { 'Pocco81/AutoSave.nvim' }
   -- use { 'williamboman/nvim-lsp-installer', requires = { 'neovim/nvim-lspconfig' } }
-  use { 'Pocco81/DAPInstall.nvim' }
-  use { 'David-Kunz/jester' }
-  use {
+  { 'Pocco81/DAPInstall.nvim' },
+  { 'David-Kunz/jester' },
+  {
   'pwntester/octo.nvim',
-  requires = {
+  dependencies = {
     'nvim-lua/plenary.nvim',
     'nvim-telescope/telescope.nvim',
     'kyazdani42/nvim-web-devicons',
@@ -69,46 +67,36 @@ return require('packer').startup(function()
   config = function ()
     require"octo".setup()
   end
-}
-  use {'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
-  use {
+},
+  {'nvim-telescope/telescope-fzf-native.nvim', build = 'make', lazy=false },
+  {
     'nvim-telescope/telescope.nvim',
-    requires = { {'nvim-lua/plenary.nvim'} }
-  }
-  use {
-    'f-person/git-blame.nvim',
-  }
-  use {
+    dependencies = { {'nvim-lua/plenary.nvim'} }
+  },
+  {
   "folke/which-key.nvim",
   config = function()
     require("which-key").setup {}
   end
-}
- use {'simeji/winresizer'}
- use {'mustache/vim-mustache-handlebars'}
- use {'github/copilot.vim'}
- use {
+},
+ {'simeji/winresizer'},
+ {'mustache/vim-mustache-handlebars'},
+ {'github/copilot.vim'},
+ { 'tpope/vim-fugitive' },
+  {
   "nvim-neotest/neotest",
-  requires = {
+  dependencies = {
     "nvim-lua/plenary.nvim",
     "nvim-treesitter/nvim-treesitter",
     "antoinemadec/FixCursorHold.nvim",
     "haydenmeade/neotest-jest",
     "nvim-neotest/neotest-python",
   }
-}
-use { "mxsdev/nvim-dap-vscode-js", requires = {"mfussenegger/nvim-dap"} }
-use {
-  "microsoft/vscode-js-debug",
-  tag = "v1.70.0",
-  opt = true,
-  run = "npm install --legacy-peer-deps && npm run compile" 
-}
-use { "luukvbaal/stabilize.nvim" }
-  use {
+},
+{ "mxsdev/nvim-dap-vscode-js", dependencies = {"mfussenegger/nvim-dap"} },
+ { "luukvbaal/stabilize.nvim" },
+   {
     "williamboman/mason.nvim",
     "williamboman/mason-lspconfig.nvim",
-}
-
-end,
-{config = {git = {clone_timeout = false}}})
+},
+})

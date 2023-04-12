@@ -1,3 +1,6 @@
+lua require('plugins')
+lua require('init')
+
 " Leader
 let mapleader = ","
 
@@ -5,7 +8,7 @@ let mapleader = ","
 set background=dark
 set completeopt=noinsert,menuone,noselect
 set hidden
-set inccommand=split
+
 set number
 set title
 set ttimeoutlen=0
@@ -20,6 +23,7 @@ set tabstop=2
 " Syntax
 filetype plugin indent on
 syntax on
+colorscheme onedark
 
 " Color support
 set t_Co=256
@@ -38,17 +42,10 @@ nnoremap <leader>fb <cmd>Telescope buffers<cr>
 nnoremap <leader>fh <cmd>Telescope help_tags<cr>
 
 
-" Plugin Manager
-lua require('plugins')
 
-" Lualine
-lua require('lualine').setup()
-
-"
-lua require('init')
 
 if has("nvim")
-  " Make escape work in the Neovim terminal.
+    " Make escape work in the Neovim terminal.
   tnoremap <Esc> <C-\><C-n>
 
   " Make navigation into and out of Neovim terminal splits nicer.
