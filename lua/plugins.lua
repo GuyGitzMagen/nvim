@@ -98,5 +98,7 @@ return require('lazy').setup({
    {
     "williamboman/mason.nvim",
     "williamboman/mason-lspconfig.nvim",
+    "haydenmeade/neotest-jest",
+
 },
 })

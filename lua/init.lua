@@ -369,7 +369,7 @@ dap.adapters.node2 = {
 }
 require("dap-vscode-js").setup({
   node_path = "node", -- Path of node executable. Defaults to $NODE_PATH, and then "node"
-  -- debugger_path = "/Users/guymagen/code/vscode-js-debug", -- Path to vscode-js-debug installation. 
+  debugger_path = "/Users/guymagen/code/vscode-js-debug", -- Path to vscode-js-debug installation. 
   adapters = { 'pwa-node', 'pwa-chrome', 'pwa-msedge', 'node-terminal', 'pwa-extensionHost' }, -- which adapters to register in nvim-dap
 
 })

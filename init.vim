@@ -63,13 +63,14 @@ nnoremap <silent> <leader>b :lua require'dap'.toggle_breakpoint()<CR>
 nnoremap <silent> <leader>B :lua require'dap'.set_breakpoint(vim.fn.input('Breakpoint condition: '))<CR>
 nnoremap <silent> <leader>lp :lua require'dap'.set_breakpoint(nil, nil, vim.fn.input('Log point message: '))<CR>
 nnoremap <silent> <leader>dr :lua require'dap'.repl.open()<CR>
-au Filetype python nnoremap <silent> <leader>dn :lua require('dap-python').test_method()<CR>
-au Filetype python nnoremap <silent> <leader>dl :lua require'dap'.run_last()<CR>
-au Filetype python nnoremap <silent> <leader>df :lua require('dap-python').test_class()<CR>
-au Filetype python vnoremap <silent> <leader>ds <ESC>:lua require('dap-python').debug_selection()<CR>
-au Filetype typescript,javascript nnoremap <silent> <leader>dn :lua require('jester').debug()<CR>
-au Filetype typescript,javascript nnoremap <silent> <leader>dl :lua require('jester').debug_last()<CR>
-" nnoremap <silent> <leader>dn :lua require("neotest").run.run({strategy = "dap"})<CR>
+nnoremap <silent> <leader>dn :lua require("neotest").run.run({strategy = "dap"})<CR>
+nnoremap <silent> <leader>sn :lua require("neotest").run.run()<CR>
+nnoremap <silent> <leader>dl :lua require("neotest").run.last({strategy = "dap"})<CR>
+nnoremap <silent> <leader>sl :lua require("neotest").run.last()<CR>
+nnoremap <silent> <leader>sf :lua require("neotest").run.run(vim.fn.expand("%"))<CR>
+nnoremap <silent> <leader>tl :lua require("neotest").summary.toggle()<CR>
+nnoremap <silent> <leader>st :lua require("neotest").output.open({ enter = true })<CR>
+nnoremap <silent> <leader>sl :lua require("neotest").output_panel.toggle()<CR>
 
 set autoread
 au CursorHold * checktime
